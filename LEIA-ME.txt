@@ -1,0 +1,40 @@
+# Efatá Soluções — versão móvel
+
+## O que é
+Aplicativo web instalável (PWA), pensado para celular. Inclui cadastro de clientes, serviços, orçamentos e lançamentos financeiros, resumo e exportação de backup/CSV.
+
+## Limites importantes
+- Os dados ficam armazenados localmente no navegador/aparelho.
+- Não há conta, banco de dados em nuvem, sincronização entre aparelhos ou acesso por vários funcionários.
+- Limpar os dados do navegador ou desinstalar/limpar o armazenamento pode apagar os registros. Exporte backups regularmente.
+- Orçamentos são registros internos; revise escopo, valores, impostos, prazos e condições antes de enviar ao cliente.
+- Esta ferramenta não substitui projeto, dimensionamento, ART/RRT, normas técnicas ou avaliação de profissional habilitado.
+
+## Publicar gratuitamente usando GitHub Pages
+1. Crie/entre em uma conta em https://github.com
+2. Clique em New repository.
+3. Nome sugerido: efata-gestao. Marque Public e crie.
+4. Dentro do repositório, clique Add file > Upload files.
+5. Extraia este ZIP no computador e envie os arquivos que estão dentro da pasta (index.html, manifest.webmanifest, sw.js e icon.svg) para a raiz do repositório.
+6. Clique Commit changes.
+7. Abra Settings > Pages.
+8. Em Build and deployment, escolha Deploy from a branch.
+9. Selecione Branch: main e Folder: /(root), depois Save.
+10. Aguarde a publicação. O GitHub mostrará um endereço parecido com https://SEU-USUARIO.github.io/efata-gestao/ . Abra esse endereço no celular.
+
+## Instalar no Android
+1. Abra o endereço publicado no Google Chrome.
+2. Toque no menu ⋮.
+3. Escolha Instalar app ou Adicionar à tela inicial.
+4. Confirme Instalar/Adicionar.
+5. O ícone Efatá Gestão aparecerá na tela inicial.
+
+## Instalar no iPhone
+1. Abra o endereço publicado no Safari.
+2. Toque em Compartilhar.
+3. Escolha Adicionar à Tela de Início.
+4. Se aparecer, ative Abrir como App da Web.
+5. Toque em Adicionar.
+
+## Backup
+Abra Mais > Exportar backup. Guarde o arquivo em local seguro. Para restaurar, use Mais > Importar backup.

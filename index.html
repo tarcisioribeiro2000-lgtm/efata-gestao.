@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10251f">
+<meta name="description" content="Central de gestão da Efatá Soluções">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Efatá Soluções | Gestão</title>
+<style>
+:root{--bg:#f3f6f4;--card:#fff;--ink:#17231f;--muted:#65736d;--green:#153d30;--lime:#d8ec9c;--line:#e2e9e4;--red:#b33a35;--shadow:0 8px 24px #163b2a12}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,sans-serif;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+header{background:linear-gradient(135deg,#10251f,#1c4a39);color:#fff;padding:24px 18px 22px;border-radius:0 0 24px 24px}
+.brand{font-weight:850;font-size:22px;letter-spacing:.2px}.brand span{color:var(--lime)}header p{margin:5px 0 0;color:#d3e3da;font-size:13px}
+main{max-width:760px;margin:auto;padding:16px}.section{display:none}.section.active{display:block}
+h2{font-size:19px;margin:8px 0 14px}.muted{color:var(--muted);font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card,.panel{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;box-shadow:var(--shadow)}
+.metric{font-size:23px;font-weight:800;margin-top:6px}.metric-label{font-size:12px;color:var(--muted)}
+.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:14px 0}
+button,.btn{border:0;border-radius:12px;padding:12px 14px;background:var(--green);color:white;font-weight:700;font-size:14px;cursor:pointer}
+button.secondary{background:#e8f0eb;color:var(--green)}button.danger{background:#fff0ef;color:var(--red)}
+button.full{width:100%}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;gap:3px;background:#fff;border-top:1px solid var(--line);padding:8px 5px calc(8px + env(safe-area-inset-bottom));z-index:5}
+nav button{background:transparent;color:#607068;padding:8px 5px;flex:1;font-size:11px;border-radius:10px}
+nav button.active{background:#e8f0eb;color:var(--green)}
+nav span{display:block;font-size:19px;margin-bottom:2px}
+label{display:block;font-size:13px;font-weight:700;margin:12px 0 5px}
+input,select,textarea{width:100%;border:1px solid #d6e0d9;border-radius:11px;padding:12px;background:#fff;font:inherit;color:var(--ink)}
+textarea{min-height:75px;resize:vertical}
+form .submit{margin-top:15px;width:100%}
+.list{display:grid;gap:9px;margin-top:12px}
+.item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.item strong{display:block}.item small{color:var(--muted);display:block;margin-top:3px}
+.item .amount{font-weight:800;white-space:nowrap}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.toolbar button{flex:1;min-width:120px}
+.empty{padding:22px;text-align:center;color:var(--muted);background:#fff;border-radius:14px;border:1px dashed #cbd8d0}
+.note{background:#f0f5e8;border:1px solid #dce9c8;border-radius:13px;padding:12px;color:#405332;font-size:13px;margin:12px 0}
+.small{font-size:12px}.pill{display:inline-block;background:#edf3ef;color:#315a47;padding:4px 8px;border-radius:30px;font-size:11px;font-weight:700}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+@media(min-width:650px){main{padding:22px}.cards{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header><div class="brand"><span>EFATÁ</span> SOLUÇÕES</div><p>Central de gestão • Construção • Elétrica • Hidráulica • Manutenção</p></header>
+<main>
+<section id="inicio" class="section active">
+<h2>Visão geral</h2>
+<div class="cards">
+<div class="card"><div class="metric-label">Clientes cadastrados</div><div class="metric" id="mClientes">0</div></div>
+<div class="card"><div class="metric-label">Serviços registrados</div><div class="metric" id="mServicos">0</div></div>
+<div class="card"><div class="metric-label">Orçamentos</div><div class="metric" id="mOrcamentos">0</div></div>
+<div class="card"><div class="metric-label">Saldo registrado</div><div class="metric" id="mSaldo">R$ 0,00</div></div>
+</div>
+<div class="actions">
+<button onclick="go('clientes')">＋ Novo cliente</button>
+<button onclick="go('servicos')">＋ Novo serviço</button>
+<button class="secondary" onclick="go('orcamentos')">Criar orçamento</button>
+<button class="secondary" onclick="go('financeiro')">Lançar financeiro</button>
+</div>
+<div class="panel"><strong>Atividade recente</strong><div id="recentes" class="list"><div class="empty">Seus registros aparecerão aqui.</div></div></div>
+<div class="note">Seus dados são guardados neste aparelho/navegador. Faça backup regularmente em “Mais”.</div>
+</section>
+
+<section id="clientes" class="section">
+<h2>Clientes</h2>
+<form id="fCliente" class="panel">
+<label>Nome do cliente *</label><input name="nome" required placeholder="Nome completo ou empresa">
+<label>Telefone / WhatsApp</label><input name="telefone" inputmode="tel" placeholder="(71) 9xxxx-xxxx">
+<label>Endereço / bairro</label><input name="endereco" placeholder="Local do serviço">
+<label>Observações</label><textarea name="obs" placeholder="Informações importantes"></textarea>
+<button class="submit">Salvar cliente</button>
+</form>
+<div id="listaClientes" class="list"></div>
+</section>
+
+<section id="servicos" class="section">
+<h2>Serviços</h2>
+<form id="fServico" class="panel">
+<label>Descrição do serviço *</label><input name="descricao" required placeholder="Ex.: manutenção elétrica">
+<label>Cliente</label><select name="cliente" id="clienteServico"><option value="">Não vinculado</option></select>
+<label>Categoria</label><select name="categoria"><option>Construção civil</option><option>Elétrica</option><option>Hidráulica</option><option>Manutenção</option><option>Reforma</option><option>Outro</option></select>
+<label>Data</label><input name="data" type="date">
+<label>Status</label><select name="status"><option>Solicitado</option><option>Agendado</option><option>Em execução</option><option>Concluído</option><option>Cancelado</option></select>
+<label>Valor combinado (R$)</label><input name="valor" type="number" min="0" step="0.01" placeholder="0,00">
+<label>Detalhes</label><textarea name="detalhes" placeholder="Materiais, equipe, observações..."></textarea>
+<button class="submit">Salvar serviço</button>
+</form>
+<div id="listaServicos" class="list"></div>
+</section>
+
+<section id="orcamentos" class="section">
+<h2>Orçamentos</h2>
+<form id="fOrcamento" class="panel">
+<label>Cliente *</label><select name="cliente" id="clienteOrc" required><option value="">Selecione</option></select>
+<label>Serviço / escopo *</label><textarea name="escopo" required placeholder="Descreva o que será executado"></textarea>
+<label>Materiais (R$)</label><input name="materiais" type="number" min="0" step="0.01" value="0">
+<label>Mão de obra (R$)</label><input name="mao" type="number" min="0" step="0.01" value="0">
+<label>Validade do orçamento</label><input name="validade" placeholder="Ex.: 7 dias">
+<label>Condições / observações</label><textarea name="condicoes" placeholder="Prazo, forma de pagamento, itens não inclusos..."></textarea>
+<button class="submit">Salvar orçamento</button>
+</form>
+<div id="listaOrcamentos" class="list"></div>
+</section>
+
+<section id="financeiro" class="section">
+<h2>Financeiro</h2>
+<form id="fFinanceiro" class="panel">
+<label>Descrição *</label><input name="descricao" required placeholder="Ex.: recebimento de instalação">
+<label>Tipo</label><select name="tipo"><option value="entrada">Entrada</option><option value="saida">Saída</option></select>
+<label>Valor (R$) *</label><input name="valor" type="number" min="0.01" step="0.01" required>
+<label>Data</label><input name="data" type="date">
+<label>Categoria</label><input name="categoria" placeholder="Material, transporte, mão de obra...">
+<button class="submit">Registrar lançamento</button>
+</form>
+<div class="cards" style="margin-top:12px">
+<div class="card"><div class="metric-label">Entradas</div><div class="metric" id="entradas">R$ 0,00</div></div>
+<div class="card"><div class="metric-label">Saídas</div><div class="metric" id="saidas">R$ 0,00</div></div>
+</div>
+<div id="listaFinanceiro" class="list"></div>
+</section>
+
+<section id="mais" class="section">
+<h2>Mais opções</h2>
+<div class="panel">
+<strong>Backup e segurança</strong>
+<p class="muted">Exporte uma cópia dos seus cadastros para guardar. Para recuperar, importe o arquivo de backup gerado por este aplicativo.</p>
+<div class="toolbar"><button onclick="backup()">Exportar backup</button><button class="secondary" onclick="document.getElementById('restore').click()">Importar backup</button></div>
+<input id="restore" type="file" accept="application/json" hidden>
+<hr>
+<strong>Relatório financeiro</strong>
+<p class="muted">Baixe os lançamentos em formato CSV para abrir em planilha.</p>
+<button class="secondary full" onclick="csv()">Exportar financeiro CSV</button>
+<hr>
+<strong>Sobre esta versão</strong>
+<p class="muted">Efatá Soluções — versão móvel inicial. Os dados permanecem no armazenamento local deste navegador/aparelho. Não há login, banco de dados na nuvem ou compartilhamento automático entre usuários.</p>
+<button class="danger full" onclick="limpar()">Apagar todos os dados deste aparelho</button>
+</div>
+</section>
+</main>
+<nav>
+<button class="active" data-go="inicio" onclick="go('inicio')"><span>⌂</span>Início</button>
+<button data-go="clientes" onclick="go('clientes')"><span>♙</span>Clientes</button>
+<button data-go="servicos" onclick="go('servicos')"><span>▣</span>Serviços</button>
+<button data-go="orcamentos" onclick="go('orcamentos')"><span>▤</span>Orçamentos</button>
+<button data-go="financeiro" onclick="go('financeiro')"><span>R$</span>Financeiro</button>
+<button data-go="mais" onclick="go('mais')"><span>⋯</span>Mais</button>
+</nav>
+<script>
+const KEY='efata_solucoes_mobile_v1';
+let db=JSON.parse(localStorage.getItem(KEY)||'{"clientes":[],"servicos":[],"orcamentos":[],"financeiro":[]}');
+const save=()=>{localStorage.setItem(KEY,JSON.stringify(db));render()};
+const money=n=>(Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dateNow=()=>new Date().toISOString().slice(0,10);
+function go(id){document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.go===id));window.scrollTo(0,0);render()}
+function clientName(id){return db.clientes.find(c=>c.id===id)?.nome||'Cliente não informado'}
+function card(title,sub,right,del){return `<div class="item"><div><strong>${esc(title)}</strong><small>${esc(sub)}</small></div><div style="text-align:right"><div class="amount">${esc(right||'')}</div><button class="danger small" style="padding:6px 9px;margin-top:7px" onclick="${del}">Excluir</button></div></div>`}
+function render(){
+document.getElementById('mClientes').textContent=db.clientes.length;
+document.getElementById('mServicos').textContent=db.servicos.length;
+document.getElementById('mOrcamentos').textContent=db.orcamentos.length;
+const ent=db.financeiro.filter(x=>x.tipo==='entrada').reduce((a,x)=>a+ +x.valor,0), sai=db.financeiro.filter(x=>x.tipo==='saida').reduce((a,x)=>a+ +x.valor,0);
+document.getElementById('mSaldo').textContent=money(ent-sai);document.getElementById('entradas').textContent=money(ent);document.getElementById('saidas').textContent=money(sai);
+const opts='<option value="">Selecione</option>'+db.clientes.map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join('');
+document.getElementById('clienteServico').innerHTML='<option value="">Não vinculado</option>'+db.clientes.map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join('');
+document.getElementById('clienteOrc').innerHTML=opts;
+document.getElementById('listaClientes').innerHTML=db.clientes.length?db.clientes.map((c)=>card(c.nome,[c.telefone,c.endereco].filter(Boolean).join(' • '), '',`del('clientes','${c.id}')`)).join(''):'<div class="empty">Nenhum cliente cadastrado.</div>';
+document.getElementById('listaServicos').innerHTML=db.servicos.length?db.servicos.slice().reverse().map(s=>card(s.descricao,`${clientName(s.cliente)} • ${s.categoria} • ${s.status}`,money(s.valor),`del('servicos','${s.id}')`)).join(''):'<div class="empty">Nenhum serviço registrado.</div>';
+document.getElementById('listaOrcamentos').innerHTML=db.orcamentos.length?db.orcamentos.slice().reverse().map(o=>card(clientName(o.cliente),o.escopo.slice(0,90),money(+o.materiais + +o.mao),`del('orcamentos','${o.id}')`)).join(''):'<div class="empty">Nenhum orçamento cadastrado.</div>';
+document.getElementById('listaFinanceiro').innerHTML=db.financeiro.length?db.financeiro.slice().reverse().map(f=>card(f.descricao,`${f.data||''} • ${f.categoria||''} • ${f.tipo==='entrada'?'Entrada':'Saída'}`,`${f.tipo==='entrada'?'+':'−'} ${money(f.valor)}`,`del('financeiro','${f.id}')`)).join(''):'<div class="empty">Nenhum lançamento financeiro.</div>';
+let recent=[...db.servicos.map(x=>({t:x.descricao,s:'Serviço • '+x.status})),...db.financeiro.map(x=>({t:x.descricao,s:'Financeiro • '+x.tipo}))].slice(-4).reverse();
+document.getElementById('recentes').innerHTML=recent.length?recent.map(x=>`<div class="item"><div><strong>${esc(x.t)}</strong><small>${esc(x.s)}</small></div></div>`).join(''):'<div class="empty">Seus registros aparecerão aqui.</div>';
+}
+function del(table,id){if(confirm('Excluir este registro?')){db[table]=db[table].filter(x=>x.id!==id);save()}}
+function bind(form,table,transform=x=>x){document.getElementById(form).addEventListener('submit',e=>{e.preventDefault();const o=Object.fromEntries(new FormData(e.target).entries());o.id=Date.now().toString();db[table].push(transform(o));e.target.reset();save();alert('Registro salvo com sucesso.');go(table==='financeiro'?'financeiro':table==='clientes'?'clientes':table==='servicos'?'servicos':'orcamentos')})}
+bind('fCliente','clientes');
+bind('fServico','servicos',o=>({...o,valor:+o.valor||0}));
+bind('fOrcamento','orcamentos',o=>({...o,materiais:+o.materiais||0,mao:+o.mao||0}));
+bind('fFinanceiro','financeiro',o=>({...o,valor:+o.valor||0,data:o.data||dateNow()}));
+function download(name,content,type){const a=document.createElement('a'),u=URL.createObjectURL(new Blob([content],{type}));a.href=u;a.download=name;a.click();URL.revokeObjectURL(u)}
+function backup(){download('backup-efata-'+dateNow()+'.json',JSON.stringify(db,null,2),'application/json')}
+document.getElementById('restore').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!x.clientes||!x.servicos||!x.orcamentos||!x.financeiro)throw Error();if(confirm('Importar este backup e substituir os dados atuais?')){db=x;save();alert('Backup importado.')}}catch(_){alert('Arquivo inválido. Selecione um backup exportado pelo app.')}e.target.value=''});
+function csv(){let rows=[['Data','Tipo','Descrição','Categoria','Valor'],...db.financeiro.map(x=>[x.data,x.tipo,x.descricao,x.categoria,x.valor])];let str=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\n');download('financeiro-efata-'+dateNow()+'.csv','\ufeff'+str,'text/csv;charset=utf-8')}
+function limpar(){if(confirm('Tem certeza? Isso apagará todos os dados locais. Faça backup antes.')){db={clientes:[],servicos:[],orcamentos:[],financeiro:[]};save()}}
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+render();
+</script>
+</body></html>
